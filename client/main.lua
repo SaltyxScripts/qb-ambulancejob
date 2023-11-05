@@ -7,7 +7,7 @@ local bedOccupying = nil
 local bedObject = nil
 local bedOccupyingData = nil
 local closestBed = nil
-local doctorCount = 0
+doctorCount = 0
 local CurrentDamageList = {}
 local cam = nil
 local playerArmor = nil
@@ -49,7 +49,7 @@ BodyParts = {
 
 -- Functions
 
-local function GetAvailableBed(bedId)
+function GetAvailableBed(bedId)
     local pos = GetEntityCoords(PlayerPedId())
     local retval = nil
     if bedId == nil then
@@ -640,6 +640,7 @@ end)
 RegisterNetEvent('hospital:client:SendToBed', function(id, data, isRevive)
     bedOccupying = id
     bedOccupyingData = data
+    TriggerEvent('qb-ambulancejob:client:cleanOfflineMedic') -- get rid of monkey
     SetBedCam()
     CreateThread(function()
         Wait(5)
@@ -971,7 +972,7 @@ else
             })
             local bedCombo = ComboZone:Create(bedPoly, { name = "bedCombo", debugPoly = false })
             bedCombo:onPlayerInOut(function(isPointInside)
-                if isPointInside then
+                if isPointInside and not isInHospitalBed then
                     exports['qb-core']:DrawText(Lang:t('text.lie_bed'), 'left')
                     CheckInControls("beds")
                 else

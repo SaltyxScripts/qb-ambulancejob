@@ -187,6 +187,9 @@ CreateThread(function()
 
                     if IsControlJustPressed(0, 47) and not emsNotified then
                         TriggerServerEvent('hospital:server:ambulanceAlert', Lang:t('info.civ_down'))
+                        if doctorCount < 1 then
+                            TriggerEvent('qb-ambulancejob:client:checkOfflineMedic')
+                        end
                         emsNotified = true
                     end
                 end
